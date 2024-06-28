@@ -1,9 +1,25 @@
-import { Box } from "@chakra-ui/react";
+import { Box, HStack, Text } from "@chakra-ui/react";
 
-function Timer() {
+function Timer({ seconds }: { seconds: number }) {
+  const minutes = Math.floor(seconds / 60);
+  const secondsRemainder =
+    seconds % 60 > 9 ? seconds % 60 : "0" + (seconds % 60);
+
   return (
-    <Box px={3} py={0.5} w="fit-content" border="2px" borderRadius='3px' borderColor="gray.400" color="gray.700">
-      17 : 56
+    <Box
+      px={3}
+      py={0.5}
+      w="fit-content"
+      border="2px"
+      borderRadius="3px"
+      borderColor="gray.400"
+      color="gray.700"
+    >
+      <HStack spacing={1}>
+        <Text>{minutes}</Text>
+        <Text>:</Text>
+        <Text>{secondsRemainder}</Text>
+      </HStack>
     </Box>
   );
 }
