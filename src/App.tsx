@@ -7,12 +7,15 @@ import {
   Button,
   Text,
 } from "@chakra-ui/react";
+
 import Timer from "./Components/Timer";
 import ProgressBar from "./Components/ProgressBar";
 import QuestionForm from "./Components/QuestionForm";
 
 import * as data from "./dataset.json";
+
 import { useState, useRef, useEffect } from "react";
+
 import { Question } from "./interfaces";
 
 function App() {
@@ -25,7 +28,6 @@ function App() {
         : -1
   );
   const [loading, setLoading] = useState<boolean>(true);
-  // const [timeInSeconds, setTimeInSeconds] = useState<number>(900);
   const [timeInSeconds, setTimeInSeconds] = useState<number>(() =>
     localStorage.getItem("timeInSeconds")
       ? // eslint-disable-next-line
@@ -42,6 +44,13 @@ function App() {
         // @ts-ignore
         +JSON.parse(localStorage.getItem("timeInSeconds"))
       : 900
+  );
+  const amountOfRightAnswers = useRef<number>(
+    localStorage.getItem("amountOfRightAnswers")
+      ? // eslint-disable-next-line
+        // @ts-ignore
+        +JSON.parse(localStorage.getItem("amountOfRightAnswers"))
+      : 0
   );
 
   useEffect(() => {
@@ -87,6 +96,7 @@ function App() {
   }, []);
 
   useEffect(() => {
+    // Завершение теста в случае прохождения всех вопросов или истечения времени
     if (questions.current.length > 0) {
       if (
         currentQuestionNumber === questions.current.length ||
@@ -149,13 +159,15 @@ function App() {
             ) : currentQuestionNumber === questions.current.length ||
               timeInSeconds === 0 ? (
               <Text fontWeight="bold" marginBottom={5} marginTop={10}>
-                Тест закончен
+                Тест закончен. Правильных ответов {amountOfRightAnswers.current}{" "}
+                из {questions.current.length}.
               </Text>
             ) : (
               <QuestionForm
                 question={questions.current[currentQuestionNumber]}
                 currentQuestionNumber={currentQuestionNumber}
                 setCurrentQuestionNumber={setCurrentQuestionNumber}
+                ref={amountOfRightAnswers}
               />
             )}
           </>

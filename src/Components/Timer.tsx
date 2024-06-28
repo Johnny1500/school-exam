@@ -1,5 +1,6 @@
 import { Box, HStack, Text } from "@chakra-ui/react";
 
+// Компонент для отображения таймера отчета времени
 function Timer({ seconds }: { seconds: number }) {
   const minutes = Math.floor(seconds / 60);
   const secondsRemainder =

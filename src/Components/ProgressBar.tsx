@@ -6,6 +6,7 @@ interface Props {
   currentQuestionNumber: number;
 }
 
+// Компонент визуально отображающий номер текущего вопроса
 const ProgressBar = memo(
   ({ amountOfQuestions, currentQuestionNumber }: Props) => {
     return (
