@@ -36,6 +36,13 @@ function App() {
 
   const questions = useRef<Question[]>([]);
   const timerRef = useRef<NodeJS.Timer | number | null>(null);
+  const timeForLocalStorageRef = useRef<number>(
+    localStorage.getItem("timeInSeconds")
+      ? // eslint-disable-next-line
+        // @ts-ignore
+        +JSON.parse(localStorage.getItem("timeInSeconds"))
+      : 900
+  );
 
   useEffect(() => {
     // Моковый запрос к бекенду
@@ -47,7 +54,6 @@ function App() {
 
       questions.current = response;
       setLoading(false);
-      // console.log("questions.current === ", questions.current);
     }
 
     try {
@@ -57,33 +63,28 @@ function App() {
         console.log(error.message);
       }
     } finally {
-      // if (localStorage.getItem("timeInSeconds")) {
-      //   timerRef.current = setInterval(() => {
-      //     setTimeInSeconds((prev) => prev - 1);
-      //     localStorage.setItem("timeInSeconds", JSON.stringify(timeInSeconds));
-      //   }, 1000);
-      // }
+      if (localStorage.getItem("timeInSeconds")) {
+        console.log("test reload timer");
+        timerRef.current = setInterval(() => {
+          setTimeInSeconds((prev) => prev - 1);
+          timeForLocalStorageRef.current--;
+          localStorage.setItem(
+            "timeInSeconds",
+            JSON.stringify(timeForLocalStorageRef.current)
+          );
+        }, 1000);
+      }
     }
 
     return () => {
       questions.current = [];
 
-      // localStorage.setItem("test", "test");
-
       if (timerRef.current) {
-        // localStorage.setItem(
-        //   "timeInSeconds",
-        //   JSON.stringify(timeInSeconds - 1)
-        // );
         clearInterval(timerRef.current);
         timerRef.current = null;
       }
     };
   }, []);
-
-  // useEffect(() => {
-  //   console.log('tick');
-  // }, [timeInSeconds])
 
   useEffect(() => {
     if (questions.current.length > 0) {
@@ -92,6 +93,7 @@ function App() {
         timeInSeconds === 0
       ) {
         localStorage.clear();
+
         if (timerRef.current) {
           clearInterval(timerRef.current);
           timerRef.current = null;
@@ -134,6 +136,11 @@ function App() {
                   );
                   timerRef.current = setInterval(() => {
                     setTimeInSeconds((prev) => prev - 1);
+                    timeForLocalStorageRef.current--;
+                    localStorage.setItem(
+                      "timeInSeconds",
+                      JSON.stringify(timeForLocalStorageRef.current)
+                    );
                   }, 1000);
                 }}
               >
