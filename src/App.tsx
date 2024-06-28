@@ -114,7 +114,7 @@ function App() {
 
   return (
     <ChakraProvider>
-      <Box minW="500px">
+      <Box minW="500px" as="main">
         {loading ? (
           <Text fontWeight="bold" marginBottom={5} marginTop={5}>
             Загрузка...

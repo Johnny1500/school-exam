@@ -41,8 +41,6 @@ const QuestionForm = memo(
       }: Props,
       ref
     ) => {
-      console.log("options === ", options);
-
       const [savedAnswers, setSavedAnswers] = useState<string[]>([]);
 
       const textRef = useRef("");
@@ -132,13 +130,6 @@ const QuestionForm = memo(
 
       function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        // let amountOfRightAnswers = localStorage.getItem("amountOfRightAnwers")
-        //   ? // eslint-disable-next-line
-        //     // @ts-ignore
-        //     +localStorage.getItem("amountOfRightAnswers")
-        //   : 0;
-
-        // console.log("savedAnswers === ", savedAnswers);
 
         switch (type) {
           case "radio":
@@ -164,12 +155,6 @@ const QuestionForm = memo(
             break;
         }
 
-        // if (type === "text" || type === "multi-text") {
-        //   console.log("textRef.current === ", textRef.current);
-        // }
-        // if (type === "text" || type === "multi-text") {
-        //   console.log("textRef.current === ", textRef.current);
-        // }
         setSavedAnswers([]);
         localStorage.setItem(
           "currentQuestionNumber",
